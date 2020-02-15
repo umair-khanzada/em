@@ -17,6 +17,7 @@
     "htmlparser2": "^3.10.1",
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",
+    "lodash.at": "^4.6.0",
     "lodash.debounce": "^4.0.8",
     "lodash.flow": "^3.5.0",
     "lodash.reverse": "^4.0.1",

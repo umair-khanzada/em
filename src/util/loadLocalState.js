@@ -39,7 +39,7 @@ export const loadLocalState = async () => {
     thoughtIndex: {},
     contextIndex: {},
     modals: {},
-    recentlyEdited: recentlyEdited || []
+    recentlyEdited: recentlyEdited || {}
   }
 
   await localForage.iterate((localValue, key, thought) => {
@@ -79,9 +79,11 @@ export const loadLocalState = async () => {
     const { thoughtIndexUpdates, contextIndexUpdates, schemaVersion } = newStateMigrated
 
     if (schemaVersion > newState.schemaVersion) {
-      sync(thoughtIndexUpdates, contextIndexUpdates, { updates: { schemaVersion }, state: false, remote: false, forceRender: true, callback: () => {
-        console.info('Local migrations complete.')
-      } })
+      sync(thoughtIndexUpdates, contextIndexUpdates, {
+        updates: { schemaVersion }, state: false, remote: false, forceRender: true, callback: () => {
+          console.info('Local migrations complete.')
+        }
+      })
 
       return newStateMigrated
     }
