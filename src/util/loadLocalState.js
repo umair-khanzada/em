@@ -39,7 +39,7 @@ export const loadLocalState = async () => {
     thoughtIndex: {},
     contextIndex: {},
     modals: {},
-    recentlyEdited: recentlyEdited || { _ROOT_: {} }
+    recentlyEdited: recentlyEdited || { [EM_TOKEN]: {} }
   }
 
   await localForage.iterate((localValue, key, thought) => {
