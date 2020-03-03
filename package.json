@@ -15,6 +15,7 @@
     "firebase-encode": "0.0.5",
     "he": "^1.2.0",
     "htmlparser2": "^3.10.1",
+    "immer": "^5.3.6",
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",
     "lodash.debounce": "^4.0.8",
