@@ -2366,10 +2366,6 @@ code, .code {
   /* margin and padding do not work on table-row. Must apply to each cell. */
 }
 
-.table-view > .children > .child > .thought-container > .bullet {
-  display: none;
-}
-
 /* column 1 */
 .table-view > .children > .child > .thought-container {
   display: table-cell;
@@ -2382,9 +2378,84 @@ code, .code {
   word-break: normal;
 }
 
+.table-view > .children > .child > .thought-container > .bullet {
+  display: none;
+}
+
+.table-view > .children > .child.editing > .thought-container > .bullet {
+  display: inline-block;
+  position: relative;
+  top: -7px;
+  left: 10px;
+}
+
+/* column 1 bullet expanded */
+.table-view > .children > .child.editing > .thought-container > .bullet {
+  margin-top: 6px;
+  margin-left: 0;
+}
+
+/* column 1 first child bullet expanded */
+.table-view > .children > .child.editing:first-child > .thought-container > .bullet {
+  top: -4px;
+}
+
+/* column 1 bullet */
+.table-view > .children > .child.expanded:not(.leaf) > .thought-container > .bullet,
+.table-view > .children > .child.editing:not(.leaf) > .thought-container > .bullet,
+.table-view > .children > .child.cursor-parent:not(.leaf) > .thought-container > .bullet,
+.table-view > .children > .child.cursor-grandparent:not(.leaf) > .thought-container > .bullet {
+  margin-top: 0;
+  top: -7px;
+}
+
+/* column 1 bullet mobile */
+.mobile .table-view > .children > .child.expanded:not(.leaf) > .thought-container > .bullet,
+.mobile .table-view > .children > .child.editing:not(.leaf) > .thought-container > .bullet,
+.mobile .table-view > .children > .child.cursor-parent:not(.leaf) > .thought-container > .bullet,
+.mobile .table-view > .children > .child.cursor-grandparent:not(.leaf) > .thought-container > .bullet {
+  margin-top: 0;
+  top: -8px;
+}
+
+/* column 1 first child bullet */
+.table-view > .children > .child.expanded:not(.leaf):first-child > .thought-container > .bullet,
+.table-view > .children > .child.editing:not(.leaf):first-child > .thought-container > .bullet,
+.table-view > .children > .child.cursor-parent:not(.leaf):first-child > .thought-container > .bullet,
+.table-view > .children > .child.cursor-grandparent:not(.leaf):first-child > .thought-container > .bullet {
+  top: -4px;
+}
+
+/* column 1 first child bullet mobile */
+.mobile .table-view > .children > .child.expanded:not(.leaf):first-child > .thought-container > .bullet,
+.mobile .table-view > .children > .child.editing:not(.leaf):first-child > .thought-container > .bullet,
+.mobile .table-view > .children > .child.cursor-parent:not(.leaf):first-child > .thought-container > .bullet,
+.mobile .table-view > .children > .child.cursor-grandparent:not(.leaf):first-child > .thought-container > .bullet {
+  top: -7px;
+  position: absolute;
+}
+
+/*.table-view > .children > .child.expanded:not(.leaf):first-child > .thought-container > .bullet,
+.table-view > .children > .child.editing:not(.leaf) > .thought-container > .bullet,
+.table-view > .children > .child.cursor-parent:not(.leaf) > .thought-container > .bullet,
+.table-view > .children > .child.cursor-grandparent:not(.leaf) > .thought-container > .bullet {
+  color: white;
+  top: -4px;
+}
+*/
 /* cursor can still be seen since are dimmed due to autofocus */
 .table-view > .children > .child > .thought-container > .thought > .bullet-cursor-overlay {
-  display: none;
+  top: -19px;
+  left: 0; /* overwritten by programmatic calculation */
+  margin-left: 0;
+}
+
+.table-view > .children > .child:first-child > .thought-container > .thought > .bullet-cursor-overlay {
+  top: -20px;
+}
+
+.mobile .table-view > .children > .child:first-child > .thought-container > .thought > .bullet-cursor-overlay {
+  top: -22px;
 }
 
 .table-view > .children > .child > .thought-container > .thought,
@@ -2394,12 +2465,6 @@ code, .code {
   min-width: 13vw;
   margin-left: 0;
   padding: 3px 0;
-}
-
-.table-view > .children > .child > .thought-container > .thought > .bullet-cursor-overlay {
-  top: -15px;
-  left: 4px;
-  margin-left: 0;
 }
 
 /* column 2 */

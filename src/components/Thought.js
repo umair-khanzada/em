@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
 import { DragSource, DropTarget } from 'react-dnd'
@@ -85,6 +85,7 @@ export const Thought = connect(({ cursor, cursorBeforeEdit, expanded, expandedCo
     // as an object:
     //   meta(pathToContext(thoughtsRankedLive)).view
     view: attribute(thoughtsRankedLive, '=view'),
+    parentView: attribute(contextOf(thoughtsRankedLive), '=view'),
     showHiddenThoughts,
   }
 })(DragSource('thought',
@@ -196,7 +197,7 @@ export const Thought = connect(({ cursor, cursorBeforeEdit, expanded, expandedCo
     dropTarget: connect.dropTarget(),
     isHovering: monitor.isOver({ shallow: true }) && monitor.canDrop()
   })
-)(({ cursor = [], isEditing, expanded, expandedContextThought, isCodeView, view, thoughtsRankedLive, thoughtsRanked, rank, contextChain, childrenForced, showContexts, depth = 0, count = 0, isDragging, isHovering, dragSource, dragPreview, dropTarget, allowSingleContext, showHiddenThoughts, dispatch }) => {
+)(({ cursor = [], isEditing, expanded, expandedContextThought, isCodeView, view, thoughtsRankedLive, thoughtsRanked, rank, contextChain, childrenForced, showContexts, depth = 0, count = 0, isDragging, isHovering, dragSource, dragPreview, dropTarget, allowSingleContext, parentView, showHiddenThoughts, dispatch }) => {
 
   // <Subthought> render
 
@@ -256,6 +257,19 @@ export const Thought = connect(({ cursor, cursorBeforeEdit, expanded, expandedCo
     : null
   const style = getStyle(thoughtsRankedLive)
 
+  const thoughtContainerRef = React.createRef()
+
+  // since column 1 has text-align: right, we need to dynamically position the overlay bullet
+  const [overlayOffset, setOverlayOffset] = useState(0)
+  if (parentView) {
+    useEffect(() => {
+      if (thoughtContainerRef.current) {
+        const annotation = thoughtContainerRef.current.querySelector('.subthought')
+        setOverlayOffset(39 - annotation.getBoundingClientRect().width)
+      }
+    })
+  }
+
   return thought ? dropTarget(dragSource(<li style={style} className={classNames({
     child: true,
     // if editing and expansion is suppressed, mark as a leaf so that bullet does not show expanded
@@ -294,8 +308,8 @@ export const Thought = connect(({ cursor, cursorBeforeEdit, expanded, expandedCo
     }
 
   }}>
-    <div className='thought-container'>
-      <Bullet thoughtsResolved={thoughtsResolved} leaf={children.filter(child => showHiddenThoughts || !isFunction(child.value)).length === 0} glyph={showContexts && !contextThought ? '✕' : null} onClick={e => {
+    <div className='thought-container' ref={thoughtContainerRef}>
+      <Bullet thoughtsResolved={thoughtsResolved} leaf={children.filter(child => showHiddenThoughts || !isFunction(child.value)).length === 0} glyph={showContexts && !contextThought ? '✕' : null} style={{ left: overlayOffset }} onClick={e => {
         if (!isEditing || children.length === 0) {
           restoreSelection(thoughtsRanked, { offset: 0 })
           e.stopPropagation()
@@ -307,7 +321,7 @@ export const Thought = connect(({ cursor, cursorBeforeEdit, expanded, expandedCo
 
       <div className='thought' style={homeContext ? { height: '1em', marginLeft: 8 } : null}>
 
-        <span className='bullet-cursor-overlay'>•</span>
+        <span className='bullet-cursor-overlay' style={parentView ? { left: overlayOffset - 14 } : null}>•</span>
 
         {showContextBreadcrumbs ? <ContextBreadcrumbs thoughtsRanked={contextOf(contextOf(thoughtsRanked))} showContexts={showContexts} />
           : showContexts && thoughtsRanked.length > 2 ? <span className='ellipsis'><a tabIndex='-1'/* TODO: Add setting to enable tabIndex for accessibility */ onClick={() => {
